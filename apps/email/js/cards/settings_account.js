@@ -37,9 +37,22 @@ function SettingsAccountCard(domNode, mode, args) {
   this.nodeFromClass('tng-account-delete')
     .addEventListener('click', this.onDelete.bind(this), false);
 
-  var identity = this.account.identities[0];
+  this.identity = this.account.identities[0];
   this.nodeFromClass('tng-account-name').
-       textContent = (identity && identity.name) || this.account.name;
+       textContent = (this.identity && this.identity.name) || this.account.name;
+
+  this.signature = this.nodeFromClass('signature-button');
+  this.signature.textContent = this.identity.signature;
+  this.signature.addEventListener('click', this.onClickSignature.bind(this),
+    false);
+
+  this.signatureEnabled = this.nodeFromClass('tng-signature-checkbox');
+  this.signatureEnabledInput = this.nodeFromClass('tng-signature-input');
+  this.signatureEnabledInput.checked = !!this.identity.signatureEnabled;
+  this.signatureEnabledInput.disabled = true;
+
+  this.signatureEnabled.addEventListener('click',
+    this.onClickSignatureEnabled.bind(this), false);
 
   // ActiveSync, IMAP and SMTP are protocol names, no need to be localized
   this.nodeFromClass('tng-account-type').textContent =
@@ -84,7 +97,13 @@ function SettingsAccountCard(domNode, mode, args) {
   this.nodeFromClass('tng-account-credentials')
     .addEventListener('click', this.onClickCredentials.bind(this), false);
 }
+
 SettingsAccountCard.prototype = {
+
+  onCardVisible: function() {
+    this.signature.textContent = this.identity.signature;
+  },
+
   onBack: function() {
     Cards.removeCardAndSuccessors(this.domNode, 'animate', 1);
   },
@@ -94,6 +113,22 @@ SettingsAccountCard.prototype = {
       'settings_account_credentials', 'default', 'animate',
       {
         account: this.account
+      },
+      'right');
+  },
+
+  onClickSignatureEnabled: function(index) {
+    var newVal = !this.signatureEnabledInput.checked;
+    this.signatureEnabledInput.checked = newVal;
+    this.identity.modifyIdentity({ signatureEnabled: newVal });
+  },
+
+  onClickSignature: function(index) {
+   Cards.pushCard(
+      'settings_signature', 'default', 'animate',
+      {
+        account: this.account,
+        index: index
       },
       'right');
   },

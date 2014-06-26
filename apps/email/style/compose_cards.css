@@ -75,6 +75,10 @@ input.cmp-subject-text {
   text-overflow: ellipsis;
 }
 
+span.cmp-signature-text {
+  color: #888;
+}
+
 .cmp-contact-add {
   background: url("images/icons/actionicon_email_addrecipient.png") no-repeat center center / 3rem auto;
   width: 3rem;

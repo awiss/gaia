@@ -44,6 +44,7 @@ apps/email/js/cards/message_reader.js
 apps/email/js/cards/settings_account.js
 apps/email/js/cards/settings_account_credentials.js
 apps/email/js/cards/settings_account_servers.js
+apps/email/js/cards/settings_signature.js
 apps/email/js/cards/settings_debug.js
 apps/email/js/cards/settings_main.js
 apps/email/js/cards/setup_account_info.js

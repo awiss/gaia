@@ -70,6 +70,8 @@ function focusInputAndPositionCursorFromContainerClick(event, input) {
  */
 function ComposeCard(domNode, mode, args) {
   this.domNode = domNode;
+  this.account = model.account;
+  this.identity = this.account.identities[0];
   this.composer = args.composer;
   this.composerData = args.composerData || {};
   this.activity = args.activity;
@@ -309,6 +311,7 @@ ComposeCard.prototype = {
     this.renderAttachments();
 
     this.subjectNode.value = this.composer.subject;
+    this.origText = this.composer.body.text;
     this.populateEditor(this.composer.body.text);
 
     if (this.composer.body.html) {
@@ -461,12 +464,14 @@ ComposeCard.prototype = {
       return false;
     }
 
-    // We need to save / ask about deleting the draft if:
+    var hasNewContent = self.composer.body.text !== this.origText;
+
+    // We need `to save / ask about deleting the draft if:
     // There's any recipients listed, there's a subject, there's anything in the
     // body, there are attachments, or we already created a draft for this
     // guy in which case we really want to provide the option to delete the
     // draft.
-    return (this.subjectNode.value || this.textBodyNode.textContent ||
+    return (this.subjectNode.value || hasNewContent ||
         !checkAddressEmpty() || this.composer.attachments.length ||
         this.composer.hasDraft);
   },

@@ -17,7 +17,8 @@ define(function(require) {
     // Call this in target object's constructor to wire up the common prefs.
     _bindPrefs: function(checkIntervalClassName, //sync interval select box
                          notifyEmailClassName,   //notify email checkbox
-                         soundOnSendClassName) { //send sound on send checkbox
+                         soundOnSendClassName,   //send sound on send checkbox
+                         signatureEnabledClassName) {
 
       if (checkIntervalClassName) {
         // Wire up the sync interval select box.
@@ -72,6 +73,12 @@ define(function(require) {
                                         false);
         soundOnSendNode.checked = this.account.playSoundOnSend;
       }
+
+      if (signatureEnabledClassName) {
+        var signatureEnabled = this.nodeFromClass(signatureEnabledClassName);
+        signatureEnabled.addEventListener('click',
+          this.onSignatureEnabledClick.bind(this), false);
+      }
     },
 
     _modifyAccountPref: function(data) {
@@ -82,6 +89,17 @@ define(function(require) {
         evt.emitWhenListener('accountModified', this.account.id, data);
       }
     },
+
+    _modifyIdentity: function(data) {
+      // On account creation, may not have a full account object yet.
+      if (this.identity.modifyIdentity) {
+        this.identity.modifyIdentity(data);
+      } else {
+        evt.emitWhenListener('identityModified', this.account.id,
+          this.identity.id, data);
+      }
+    },
+
 
     nodeFromClass: function(className) {
       return this.domNode.getElementsByClassName(className)[0];
@@ -103,6 +121,12 @@ define(function(require) {
       var checked = event.target.checked;
       console.log('playSoundOnSend changed to: ' + checked);
       this._modifyAccountPref({ playSoundOnSend: checked });
+    },
+
+    onSignatureEnabledClick: function(event) {
+      var checked = event.target.checked;
+      console.log('signatureEnabled changed to: ' + checked);
+      this._modifyIdentity({ signatureEnabled: checked });
     }
   };
 });

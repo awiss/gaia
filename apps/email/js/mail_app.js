@@ -293,6 +293,19 @@ evt.on('accountModified', function(accountId, data) {
   });
 });
 
+evt.on('identityModified', function(accountId, identityId, data) {
+  model.latestOnce('acctsSlice', function() {
+    var account = model.getAccount(accountId);
+    if (account) {
+      for (var i = 0; i < account.identities.length; i++) {
+        if (account.identities[i].id === identityId) {
+          account.identities[i].modifyIdentity(data);
+        }
+      }
+    }
+  });
+});
+
 // The add account UI flow is requested.
 evt.on('addAccount', function() {
   Cards.removeAllCards();

@@ -5,6 +5,7 @@ var templateNode = require('tmpl!./setup_account_prefs.html'),
     prefsMixin = require('./account_prefs_mixins'),
     mix = require('mix'),
     evt = require('evt'),
+    mozL10n = require('l10n!'),
     common = require('mail_common'),
     Cards = common.Cards;
 
@@ -17,7 +18,7 @@ function SetupAccountPrefsCard(domNode, mode, args) {
   this.identity = this.account.identities[0];
 
   // Establish defaults specifically for our email app.
-  this.identity.signature = 'Sent Using FirefoxOS';
+  this.identity.signature = mozL10n.get('settings-default-signature');
   this.identity.signatureEnabled = true;
   evt.emitWhenListener('identityModified', this.account.id, this.identity.id,
     { signatureEnabled: true, signature: 'Sent Using FirefoxOS' });

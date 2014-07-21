@@ -34,26 +34,10 @@ SettingsSignatureCard.prototype = {
 
     // Only push the signature if it was changed
     if (signature !== this.identity.signature) {
-      var data = { signature: signature };
-
-      // This is a stopgap to ensure that the UI remains properly updated
-      // even if the backend is not fast enough. This is necessary on the
-      // setup_account_prefs card, where modifyIdentity does not exist on the
-      // identity object yet.
-      this.identity.signature = signature;
-
-
-      if (this.identity.modifyIdentity) {
-        this.identity.modifyIdentity(data);
-      } else {
-        // Todo, implement alternative for identities
-        evt.emitWhenListener('identityModified', this.account.id,
-          this.identity.id, data);
-      }
+      this.identity.modifyIdentity({ signature: signature });
     }
 
     this.onBack();
-
   },
 
   die: function() {

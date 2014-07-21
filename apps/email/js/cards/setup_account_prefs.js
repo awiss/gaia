@@ -18,10 +18,8 @@ function SetupAccountPrefsCard(domNode, mode, args) {
   this.identity = this.account.identities[0];
 
   // Establish defaults specifically for our email app.
-  this.identity.signature = mozL10n.get('settings-default-signature');
-  this.identity.signatureEnabled = true;
-  evt.emitWhenListener('identityModified', this.account.id, this.identity.id,
-    { signatureEnabled: true, signature: 'Sent Using FirefoxOS' });
+  this.identity.modifyIdentity({ signatureEnabled: true,
+    signature: mozL10n.get('settings-default-signature') });
 
   this.signature = this.nodeFromClass('signature-button');
   this.signature.textContent = this.identity.signature;
@@ -32,6 +30,9 @@ function SetupAccountPrefsCard(domNode, mode, args) {
   this.signatureEnabledInput = this.nodeFromClass('tng-signature-input');
 
   this.signatureEnabledInput.checked = !!this.identity.signatureEnabled;
+
+  this.signatureEnabledInput.addEventListener('click',
+    this.onClickSignatureEnabled.bind(this), false);
 
   this.nextButton = this.nodeFromClass('sup-info-next-btn');
   this.nextButton.addEventListener('click', this.onNext.bind(this), false);
@@ -65,6 +66,11 @@ SetupAccountPrefsCard.prototype = {
         index: index
       },
       'right');
+  },
+
+  onClickSignatureEnabled: function(index) {
+    var newVal = this.signatureEnabledInput.checked;
+    this.identity.modifyIdentity({ signatureEnabled: newVal });
   },
 
   die: function() {

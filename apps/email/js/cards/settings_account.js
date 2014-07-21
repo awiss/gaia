@@ -49,9 +49,8 @@ function SettingsAccountCard(domNode, mode, args) {
   this.signatureEnabled = this.nodeFromClass('tng-signature-checkbox');
   this.signatureEnabledInput = this.nodeFromClass('tng-signature-input');
   this.signatureEnabledInput.checked = !!this.identity.signatureEnabled;
-  this.signatureEnabledInput.disabled = true;
 
-  this.signatureEnabled.addEventListener('click',
+  this.signatureEnabledInput.addEventListener('click',
     this.onClickSignatureEnabled.bind(this), false);
 
   // ActiveSync, IMAP and SMTP are protocol names, no need to be localized
@@ -101,6 +100,8 @@ function SettingsAccountCard(domNode, mode, args) {
 SettingsAccountCard.prototype = {
 
   onCardVisible: function() {
+    // This makes sure the UI is updated when returning from
+    // the signature input card
     this.signature.textContent = this.identity.signature;
   },
 
@@ -118,8 +119,7 @@ SettingsAccountCard.prototype = {
   },
 
   onClickSignatureEnabled: function(index) {
-    var newVal = !this.signatureEnabledInput.checked;
-    this.signatureEnabledInput.checked = newVal;
+    var newVal = this.signatureEnabledInput.checked;
     this.identity.modifyIdentity({ signatureEnabled: newVal });
   },
 

@@ -74,32 +74,7 @@ define(function(require) {
         soundOnSendNode.checked = this.account.playSoundOnSend;
       }
 
-      if (signatureEnabledClassName) {
-        var signatureEnabled = this.nodeFromClass(signatureEnabledClassName);
-        signatureEnabled.addEventListener('click',
-          this.onSignatureEnabledClick.bind(this), false);
-      }
     },
-
-    _modifyAccountPref: function(data) {
-      // On account creation, may not have a full account object yet.
-      if (this.account.modifyAccount) {
-        this.account.modifyAccount(data);
-      } else {
-        evt.emitWhenListener('accountModified', this.account.id, data);
-      }
-    },
-
-    _modifyIdentity: function(data) {
-      // On account creation, may not have a full account object yet.
-      if (this.identity.modifyIdentity) {
-        this.identity.modifyIdentity(data);
-      } else {
-        evt.emitWhenListener('identityModified', this.account.id,
-          this.identity.id, data);
-      }
-    },
-
 
     nodeFromClass: function(className) {
       return this.domNode.getElementsByClassName(className)[0];
@@ -108,25 +83,19 @@ define(function(require) {
     onChangeSyncInterval: function(event) {
       var value = parseInt(event.target.value, 10);
       console.log('sync interval changed to', value);
-      this._modifyAccountPref({ syncInterval: value });
+      this.account.modifyAccount({ syncInterval: value });
     },
 
     onNotifyEmailClick: function(event) {
       var checked = event.target.checked;
       console.log('notifyOnNew changed to: ' + checked);
-      this._modifyAccountPref({ notifyOnNew: checked });
+      this.account.modifyAccount({ notifyOnNew: checked });
     },
 
     onSoundOnSendClick: function(event) {
       var checked = event.target.checked;
       console.log('playSoundOnSend changed to: ' + checked);
-      this._modifyAccountPref({ playSoundOnSend: checked });
-    },
-
-    onSignatureEnabledClick: function(event) {
-      var checked = event.target.checked;
-      console.log('signatureEnabled changed to: ' + checked);
-      this._modifyIdentity({ signatureEnabled: checked });
+      this.account.modifyAccount({ playSoundOnSend: checked });
     }
   };
 });

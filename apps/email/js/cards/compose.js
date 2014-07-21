@@ -76,6 +76,8 @@ function ComposeCard(domNode, mode, args) {
   this.composerData = args.composerData || {};
   this.activity = args.activity;
   this.sending = false;
+  this.wifiLock = null;
+
 
   // Management of attachment work, to limit memory use
   this._totalAttachmentsFinishing = 0;
@@ -311,7 +313,12 @@ ComposeCard.prototype = {
     this.renderAttachments();
 
     this.subjectNode.value = this.composer.subject;
+    // Save the initial state of the composer so that if the user immediately
+    // hits the back button without doing anything we can simply discard the
+    // draft. This is not for avoiding redundant saves or any attempt at
+    // efficiency.
     this.origText = this.composer.body.text;
+
     this.populateEditor(this.composer.body.text);
 
     if (this.composer.body.html) {

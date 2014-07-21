@@ -8,26 +8,18 @@
     "url": "https://github.com/mozilla-b2g/gaia"
   },
   "messages": [
-    {
-      "alarm": "/index.html"
-    },
-    {
-      "notification": "/index.html"
-    }
+    { "alarm": "/index.html" },
+    { "notification": "/index.html" }
   ],
   "permissions": {
-    "alarms": {},
-    "audio-channel-notification": {},
-    "contacts": {
-      "access": "readcreate"
-    },
-    "desktop-notification": {},
-    "storage": {},
-    "device-storage:sdcard": {
-      "access": "readcreate"
-    },
-    "systemXHR": {},
-    "tcp-socket": {}
+    "alarms":{},
+    "audio-channel-notification":{},
+    "contacts":{ "access": "readcreate" },
+    "desktop-notification":{},
+    "storage":{},
+    "device-storage:sdcard":{ "access": "readcreate" },
+    "systemXHR":{},
+    "tcp-socket":{}
   },
   "locales": {
     "ar": {
@@ -65,12 +57,7 @@
     },
     "share": {
       "filters": {
-        "type": [
-          "audio/*",
-          "image/*",
-          "url",
-          "video/*"
-        ]
+        "type": ["audio/*", "image/*", "url", "video/*"]
       },
       "disposition": "window",
       "returnValue": true
@@ -78,10 +65,7 @@
     "view": {
       "filters": {
         "type": "url",
-        "url": {
-          "required": true,
-          "pattern": "mailto:.{1,16384}"
-        },
+        "url": { "required":true, "pattern":"mailto:.{1,16384}" },
         "disposition": "window",
         "returnValue": true
       }

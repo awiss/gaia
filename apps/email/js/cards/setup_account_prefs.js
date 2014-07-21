@@ -51,6 +51,9 @@ SetupAccountPrefsCard.prototype = {
   },
 
   onCardVisible: function() {
+    // This forces the card to immediately update when the user
+    // returns from the signature input card, even if the backend
+    // has not updated the identity yet
     this.signature.textContent = this.identity.signature;
   },
 

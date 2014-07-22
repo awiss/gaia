@@ -121,7 +121,21 @@ section[role="region"] > header:first-child a.tng-signature-done{
 
 .tng-signature-input {
   margin: 0;
-  min-height:100%;
+  min-height: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  max-height: none;
+  display: block;
+  font-family: inherit;
+  font-weight: normal;
+  color: #333;
+  border: medium none;
+  box-shadow: none;
+  background: none repeat scroll 0 0 #FFF;
+  outline: 0 none;
+  white-space: pre-wrap;
+  padding: 1rem 1.5rem 0;
+  font-size: 1.6rem;
 }
 
 li:not([role]) {

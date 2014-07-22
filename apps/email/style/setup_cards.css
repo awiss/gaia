@@ -105,13 +105,6 @@ section[role="region"].skin-organic {
   margin: 0;
 }
 
-section[role="region"] > header:first-child a.tng-signature-done{
-  font-size: 13px;
-  max-width: 50px;
-  text-decoration: none;
-  float:right;
-}
-
 .tng-account-add, .tng-account-delete {
   display: block;
   width: calc(100% - 3rem);

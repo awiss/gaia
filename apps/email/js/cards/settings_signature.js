@@ -1,9 +1,10 @@
 /*global define*/
 define(function(require) {
 
+'use strict';
+
 var templateNode = require('tmpl!./settings_signature.html'),
     common = require('mail_common'),
-    evt = require('evt'),
     Cards = common.Cards;
 
 function SettingsSignatureCard(domNode, mode, args) {

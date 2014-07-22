@@ -44,7 +44,6 @@ function SetupAccountPrefsCard(domNode, mode, args) {
 }
 
 SetupAccountPrefsCard.prototype = {
-
   onNext: function(event) {
     Cards.pushCard(
       'setup_done', 'default', 'animate',

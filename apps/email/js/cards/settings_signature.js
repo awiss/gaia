@@ -20,7 +20,7 @@ function SettingsSignatureCard(domNode, mode, args) {
   domNode.getElementsByClassName('tng-signature-done')[0]
     .addEventListener('click', this.onClickDone.bind(this), false);
 
-  this.populateEditor(this.identity.signature);
+  this.populateEditor(this.identity.signature || "");
 
 }
 

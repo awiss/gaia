@@ -15,6 +15,8 @@ var templateNode = require('tmpl!./compose.html'),
     cmpPeepBubbleNode = require('tmpl!./cmp/peep_bubble.html'),
     cmpInvalidAddressesNode = require('tmpl!./cmp/invalid_addresses.html'),
     msgAttachConfirmNode = require('tmpl!./msg/attach_confirm.html'),
+    editorMixin = require('./editor_mixins'),
+    mix = require('mix'),
     evt = require('evt'),
     common = require('mail_common'),
     Toaster = require('toaster'),
@@ -70,14 +72,10 @@ function focusInputAndPositionCursorFromContainerClick(event, input) {
  */
 function ComposeCard(domNode, mode, args) {
   this.domNode = domNode;
-  this.account = model.account;
-  this.identity = this.account.identities[0];
   this.composer = args.composer;
   this.composerData = args.composerData || {};
   this.activity = args.activity;
   this.sending = false;
-  this.wifiLock = null;
-
 
   // Management of attachment work, to limit memory use
   this._totalAttachmentsFinishing = 0;
@@ -98,6 +96,9 @@ function ComposeCard(domNode, mode, args) {
   this.htmlBodyContainer = domNode.getElementsByClassName('cmp-body-html')[0];
   this.errorMessage = domNode.getElementsByClassName('cmp-error-message')[0];
   this.htmlIframeNode = null;
+
+  // Pass text node to editor mixins
+  this._bindPrefs(this.textBodyNode);
 
   this.scrollContainer =
     domNode.getElementsByClassName('scrollregion-below-header')[0];
@@ -213,44 +214,6 @@ ComposeCard.prototype = {
     selection.addRange(range);
   },
 
-  /**
-   * Inserts an email into the contenteditable element
-   */
-  populateEditor: function(value) {
-    var lines = value.split('\n');
-    var frag = document.createDocumentFragment();
-    for (var i = 0, len = lines.length; i < len; i++) {
-      if (i) {
-        frag.appendChild(document.createElement('br'));
-      }
-      frag.appendChild(document.createTextNode(lines[i]));
-    }
-    this.textBodyNode.appendChild(frag);
-  },
-
-  /**
-   * Gets the raw value from a contenteditable div
-   */
-  fromEditor: function(value) {
-    var content = '';
-    var len = this.textBodyNode.childNodes.length;
-    for (var i = 0; i < len; i++) {
-      var node = this.textBodyNode.childNodes[i];
-      if (node.nodeName === 'BR' &&
-          // Gecko's contenteditable implementation likes to create a synthetic
-          // trailing BR with type="_moz".  We do not like/need this synthetic
-          // BR, so we filter it out.  Check out
-          // nsTextEditRules::CreateTrailingBRIfNeeded to find out where it
-          // comes from.
-          node.getAttribute('type') !== '_moz') {
-        content += '\n';
-      } else {
-        content += node.textContent;
-      }
-    }
-
-    return content;
-  },
 
   postInsert: function() {
     // the HTML bit needs us linked into the DOM so the iframe can be
@@ -471,7 +434,7 @@ ComposeCard.prototype = {
       return false;
     }
 
-    var hasNewContent = self.composer.body.text !== this.origText;
+    var hasNewContent = this.fromEditor() !== self.composer.body.text;
 
     // We need `to save / ask about deleting the draft if:
     // There's any recipients listed, there's a subject, there's anything in the
@@ -1140,6 +1103,8 @@ ComposeCard.prototype = {
     }
   }
 };
+
+mix(ComposeCard.prototype, editorMixin);
 Cards.defineCardWithDefaultMode('compose', {}, ComposeCard, templateNode);
 
 return ComposeCard;

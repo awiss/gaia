@@ -122,11 +122,12 @@ section[role="region"].skin-organic {
   font-family: inherit;
   font-weight: normal;
   color: #333;
-  border: medium none;
+  border: none;
   box-shadow: none;
-  background: none repeat scroll 0 0 #FFF;
-  outline: 0 none;
-  white-space: pre-wrap;
+  background: white;
+  outline: 0;
+  white-space: nowrap;
+  text-overflow: ellipsis;
   padding: 1rem 1.5rem 0;
   font-size: 1.6rem;
 }

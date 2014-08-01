@@ -29,7 +29,8 @@ function SettingsAccountCard(domNode, mode, args) {
 
   this._bindPrefs('tng-account-check-interval',
                   'tng-notify-mail',
-                  'tng-sound-onsend');
+                  'tng-sound-onsend',
+                  'tng-signature-input');
 
   this.nodeFromClass('tng-back-btn')
     .addEventListener('click', this.onBack.bind(this), false);
@@ -41,17 +42,10 @@ function SettingsAccountCard(domNode, mode, args) {
   this.nodeFromClass('tng-account-name').
        textContent = (this.identity && this.identity.name) || this.account.name;
 
-  this.signature = this.nodeFromClass('signature-button');
-  this.signature.textContent = this.identity.signature;
-  this.signature.addEventListener('click', this.onClickSignature.bind(this),
+  this.signatureButton = this.nodeFromClass('signature-button');
+  this.signatureButton.textContent = this.identity.signature;
+  this.signatureButton.addEventListener('click', this.onClickSignature.bind(this),
     false);
-
-  this.signatureEnabled = this.nodeFromClass('tng-signature-checkbox');
-  this.signatureEnabledInput = this.nodeFromClass('tng-signature-input');
-  this.signatureEnabledInput.checked = !!this.identity.signatureEnabled;
-
-  this.signatureEnabledInput.addEventListener('click',
-    this.onClickSignatureEnabled.bind(this), false);
 
   // ActiveSync, IMAP and SMTP are protocol names, no need to be localized
   this.nodeFromClass('tng-account-type').textContent =
@@ -102,7 +96,7 @@ SettingsAccountCard.prototype = {
   onCardVisible: function() {
     // This makes sure the UI is updated when returning from
     // the signature input card
-    this.signature.textContent = this.identity.signature;
+    this.signatureButton.textContent = this.identity.signature;
   },
 
   onBack: function() {
@@ -116,11 +110,6 @@ SettingsAccountCard.prototype = {
         account: this.account
       },
       'right');
-  },
-
-  onClickSignatureEnabled: function(index) {
-    var newVal = this.signatureEnabledInput.checked;
-    this.identity.modifyIdentity({ signatureEnabled: newVal });
   },
 
   onClickSignature: function(index) {

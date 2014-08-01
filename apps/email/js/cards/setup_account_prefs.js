@@ -67,11 +67,6 @@ SetupAccountPrefsCard.prototype = {
       'right');
   },
 
-  onClickSignatureEnabled: function(index) {
-    var newVal = this.signatureEnabledInput.checked;
-    this.identity.modifyIdentity({ signatureEnabled: newVal });
-  },
-
   die: function() {
   }
 };

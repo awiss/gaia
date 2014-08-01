@@ -74,6 +74,14 @@ define(function(require) {
         soundOnSendNode.checked = this.account.playSoundOnSend;
       }
 
+      if (signatureEnabledClassName) {
+        var signatureEnabledNode = this.nodeFromClass(signatureEnabledClassName);
+        signatureEnabledNode.addEventListener('click',
+                                        this.onSignatureEnabledClick.bind(this),
+                                        false);
+        signatureEnabledNode.checked = !!this.identity.signatureEnabled;
+      }
+
     },
 
     nodeFromClass: function(className) {
@@ -96,6 +104,14 @@ define(function(require) {
       var checked = event.target.checked;
       console.log('playSoundOnSend changed to: ' + checked);
       this.account.modifyAccount({ playSoundOnSend: checked });
+    },
+
+    onSignatureEnabledClick: function(event) {
+      var checked = event.target.checked;
+      console.log('signatureEnabled changed to: ' + checked);
+      this.identity.modifyIdentity({ signatureEnabled: checked });
     }
+
+
   };
 });

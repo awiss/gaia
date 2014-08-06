@@ -4,6 +4,7 @@ define(function(require) {
 'use strict';
 
 var templateNode = require('tmpl!./settings_signature.html'),
+    backFormNode = require('tmpl!./sig/save_signature.html'),
     editorMixin = require('./editor_mixins'),
     mix = require('mix'),
     common = require('mail_common'),
@@ -30,8 +31,41 @@ function SettingsSignatureCard(domNode, mode, args) {
 
 SettingsSignatureCard.prototype = {
 
-  onBack: function() {
+
+  goBack: function() {
     Cards.removeCardAndSuccessors(this.domNode, 'animate', 1);
+  },
+
+  onBack: function() {
+    var signature = this.fromEditor();
+    if (signature === this.identity.signature) {
+      this.goBack();
+      return;
+    }
+    var menu = backFormNode.cloneNode(true);
+    this._savePromptMenu = menu;
+    document.body.appendChild(menu);
+
+    var formSubmit = (function(evt) {
+      document.body.removeChild(menu);
+      this._savePromptMenu = null;
+
+      switch (evt.explicitOriginalTarget.id) {
+        case 'sig-save':
+          console.log('save signature');
+          this.identity.modifyIdentity({ signature: signature });
+          this.goBack();
+          break;
+        case 'sig-discard':
+          console.log('save signature');
+          this.goBack();
+          break;
+        case 'sig-cancel':
+          break;
+      }
+      return false;
+    }).bind(this);
+    menu.addEventListener('submit', formSubmit);
   },
 
   onClickDone: function() {
@@ -44,6 +78,7 @@ SettingsSignatureCard.prototype = {
 
     this.onBack();
   },
+
 
   die: function() {
   },

@@ -21,6 +21,7 @@ var templateNode = require('tmpl!./settings_account.html'),
 function SettingsAccountCard(domNode, mode, args) {
   this.domNode = domNode;
   this.account = args.account;
+  this.identity = this.account.identities[0];
 
   var serversContainer = this.nodeFromClass('tng-account-server-container');
 
@@ -38,7 +39,6 @@ function SettingsAccountCard(domNode, mode, args) {
   this.nodeFromClass('tng-account-delete')
     .addEventListener('click', this.onDelete.bind(this), false);
 
-  this.identity = this.account.identities[0];
   this.nodeFromClass('tng-account-name').
        textContent = (this.identity && this.identity.name) || this.account.name;
 

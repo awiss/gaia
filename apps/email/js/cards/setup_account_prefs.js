@@ -26,14 +26,6 @@ function SetupAccountPrefsCard(domNode, mode, args) {
   this.signature.addEventListener('click', this.onClickSignature.bind(this),
     false);
 
-  this.signatureEnabled = this.nodeFromClass('tng-signature-checkbox');
-  this.signatureEnabledInput = this.nodeFromClass('tng-signature-input');
-
-  this.signatureEnabledInput.checked = !!this.identity.signatureEnabled;
-
-  this.signatureEnabledInput.addEventListener('click',
-    this.onClickSignatureEnabled.bind(this), false);
-
   this.nextButton = this.nodeFromClass('sup-info-next-btn');
   this.nextButton.addEventListener('click', this.onNext.bind(this), false);
 

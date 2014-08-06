@@ -8,7 +8,7 @@ define(function(require) {
 
     _bindPrefs: function(textNode) {
       this._editorNode = textNode;
-    }
+    },
     /**
      * Inserts an email into the contenteditable element
      */
